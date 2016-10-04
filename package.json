@@ -1,0 +1,24 @@
+{
+  "name": "terminal-todo",
+  "version": "1.0.0",
+  "description": "another terminal todo list",
+  "main": "index.js",
+  "watch": {
+    "build": "index.es6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel index.es6 --out-file index.js",
+    "watch": "npm-watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "nedb": "^1.8.0",
+    "react-blessed": "^0.1.7"
+  },
+  "devDependencies": {
+    "npm-watch": "^0.1.6"
+  }
+}
