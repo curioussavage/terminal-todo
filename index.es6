@@ -1,110 +1,55 @@
-import React, {Component} from 'react';
-import blessed from 'blessed';
-import {render} from 'react-blessed';
+#!/usr/bin/env babel-node
+import runGui from './gui.es6';
+import {
+  markDone,
+  listTodos,
+  addTodo,
+  editTodo,
+} from './actions.js';
+import { syncDb } from './db.js';
 
 import program from 'commander';
-import Datastore from 'nedb';
+import fs from 'fs';
 
-// Rendering a simple centered box
-class App extends Component {
-  render() {
-    return (
-      <box top="center"
-           left="center"
-           width="100%"
-           height="100%"
-           border={{type: 'line'}}
-           style={{border: {fg: 'blue'}}}>
-        <box height="90%"
-             width="98%"
-             border={{type: 'line'}}
+function main() {
+  program.version('0.0.1')
 
-        >
-        poop
-        </box>
-        <box bottom="0"
-             width="98%"
-             height="10%"
-             border={{type: 'line'}}
-        >
-          Hello world
-        </box>
-      </box>
-    );
+  program.command('gui')
+    .description('run the gui')
+    .option('-p --project <project>', 'start gui showing a specific project')
+    .action(runGui)
+
+  program.command('add <title...>')
+    .description('add a todo')
+    .option('-c --category <category>', 'the assigned category', '')
+    .option('-p --project <project>', 'the project this task belongs to', '')
+    .action(addTodo)
+
+  program.command('done <index>')
+    .description('mark a todo as done')
+    .action(markDone)
+
+  program.command('edit <index> <field> <value>')
+    .description('edit a todo field value')
+    .action(editTodo)
+
+  program.command('list')
+    .description('list todos')
+    .option('-c --category <category>', 'filter by category', '')
+    .option('-p --project <project>', 'filter by project', '')
+    .action(listTodos);
+
+  // maybe a reason to find an alternative, subcommands aren't well documented
+  // many issues on github about them
+  program.command('project <subcommand> [args...]', 'manage projects')
+
+  program.parse(process.argv);
+}
+
+fs.access('./todos.sqlite3', function(err) {
+  if (err) {
+    syncDb(main);
+  } else {
+    main();
   }
-}
-
-let db = new Datastore({filename: __dirname + '/db', autoload: true})
-
-program.version('0.0.1')
-
-program.command('gui')
-  .description('run the gui')
-  .action(runGui)
-
-program.command('add <title...>')
-  .description('add a todo')
-  .action(addTodo)
-
-program.command('done <index>')
-  .description('mark a todo as done')
-  .action(markDone)
-
-program.command('list')
-  .description('list todos')
-  .action(listTodos);
-
-
-program.parse(process.argv);
-
-function markDone(index) {
-  db.find({done: false}, (err, docs) => {
-    var id = docs[index]._id
-    db.update({_id: id}, {done: true})
-  })
-}
-
-function listTodos() {
- db.find({done: false}, (err, docs) => {
-   docs.forEach((doc, index)=> {
-    console.log(index + " - '" + doc.title + "' " + doc.created)
-   });
- });
-}
-
-function Todo(title) {
-  this.title = title;
-  this.done = false;
-  this.created = new Date();
-}
-
-Todo.prototype.toJson = () => {
-  return {
-    title: this.title,
-    done: this.done,
-    created: this.created.toString(),
-  }
-}
-
-function addTodo(title) {
-  title = title.join(' ');
-  db.insert(new Todo(title), (err, newDocs) => {
-    console.log('success', newDocs)
-  })
-}
-
-function runGui() {
-  const screen = blessed.screen({
-    autoPadding: true,
-    smartCSR: true,
-    title: 'react-blessed hello world'
-  });
-
-  // Adding a way to quit the program
-  screen.key(['escape', 'q', 'C-c'], function(ch, key) {
-    return process.exit(0);
-  });
-
-  // Rendering the React app using our screen
-  const component = render(<App />, screen);
-}
+});
