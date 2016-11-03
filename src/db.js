@@ -7,6 +7,7 @@ export const db = new Sequelize('sqlite:todos.sqlite3', {
   logging: false,
 });
 
+
 // TODO categories really should be in their own table
 // but I'm not sure how to order them *easily
 // it would be nice though because I could have a default field on
@@ -35,7 +36,7 @@ export const syncDb = function(cb) {
     Project.create({
       name: 'default',
       categories: 'todo,done',
-    }).then(cb);
+    }).then(cb).catch(cb);
   });
 }
 

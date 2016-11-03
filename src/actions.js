@@ -89,7 +89,7 @@ export function addTodo(title, p) {
   let category = !p.project && !p.category ? 'todo' : p.category || '';
   let params = {
     title: title.join(' '),
-    category: p.category,
+    category: category,
     created: new Date().toUTCString(),
     ProjectId: p.project || 1,
   };

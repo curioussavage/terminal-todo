@@ -1,5 +1,5 @@
-#!/usr/bin/env babel-node
-import runGui from './gui.es6';
+#!/usr/bin/env node
+import runGui from './gui';
 import {
   markDone,
   listTodos,
@@ -46,10 +46,13 @@ function main() {
   program.parse(process.argv);
 }
 
-fs.access('./todos.sqlite3', function(err) {
-  if (err) {
-    syncDb(main);
-  } else {
-    main();
-  }
-});
+main();
+
+/*fs.access('./todos.sqlite3', function(err) {*/
+  //console.log('found file')
+  //if (err) {
+    //syncDb(main);
+  //} else {
+    //main();
+  //}
+/*}*/);

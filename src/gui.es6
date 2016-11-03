@@ -5,7 +5,7 @@ import sugar from 'sugar';
 import { EventEmitter2 } from 'eventemitter2';
 
 import { db, Todo, Project } from './db.js';
-import TodoForm from './todoForm.es6';
+import TodoForm from './todoForm';
 
 
 class App extends Component {
@@ -106,7 +106,7 @@ class App extends Component {
 
   kanbanSelect(list, index) {
     //let item = list.getItem(index);
-    SCREEN.debug(Object.keys(list), list.content);
+    //
   }
 
   makeKanbanColumns(todos) {
@@ -222,7 +222,7 @@ class App extends Component {
 
 const viewModes = { 'kanban': 0, 'normal': 1 }
 let SCREEN;
-initialState = {
+let initialState = {
 // initial state goes here.
 }
 
