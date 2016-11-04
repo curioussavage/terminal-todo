@@ -12,9 +12,10 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      rows: this.props.rows,
-      project: this.props.project,
-      singleColSelectedCat: this.props.project.categories.split(',')[0]
+      rows: props.rows,
+      project: props.project,
+      // should maybe call this visible not selected to be more specific
+      singleColSelectedCat: props.project.categories.split(',')[0],
       selected: null,
       showMenu: false,
       showNewForm: false,
@@ -32,7 +33,7 @@ class App extends Component {
       if (row.due) {
         due = new sugar.Date(row.due).format('%Y-%m-%d').raw
       }
-      return [ row.title, date, due ]
+      return [row.title, date, due ]
     });
 
     rows.unshift(['Title', 'Created', 'Due'])
@@ -92,7 +93,7 @@ class App extends Component {
             ref={ 'k' + index }
             dockBorders={true}
             border={ {type: 'line'} }
-            items={ cols[colName] }
+            items={ cols[colName].map((todo, index) => {return todo.title}) }
             selectedBg={ isFocused ? 'blue' : 'transparent' }
             mouse={true}
             keys={true}
@@ -100,29 +101,16 @@ class App extends Component {
             top="8%"
             width="100%"
             height="94%"
-            onSelect={ this.kanbanSelect.bind(this) }
+            onSelect={ this.kanbanSelect.bind(this, colName) }
           />
         </box>
       );
      });
   }
 
-  kanbanSelect(list, index) {
-    //let item = list.getItem(index);
-    //
-  }
-
-  makeKanbanColumns(todos) {
-    let cols = {};
-    todos.forEach((todo) => {
-      if (cols[todo.category]) {
-        cols[todo.category].push(todo.title);
-      } else {
-       cols[todo.category] = [];
-       cols[todo.category].push(todo.title);
-      }
-    });
-    return cols;
+  kanbanSelect(category, list, index) {
+    let selected = { index, category };
+    this.setState({ selected: selected}); 
   }
 
   renderNormalMode(rows) {
@@ -139,10 +127,15 @@ class App extends Component {
            rows={ rows }
            selectedBg='blue'
            style={{ header: {fg: 'blue'}}}
-           onSelect={ (tableNode, item) => { this.setState({ selected: item - 1}) } }
+           onSelect={ this.singleModeSelect.bind(this) }
       >
       </listtable>
     );
+  }
+
+  singleModeSelect(list, index) {
+    let selected = { index: index - 1, category: this.state.singleColSelectedCat}
+    this.setState({ selected: selected});
   }
 
   getView() {
@@ -162,7 +155,8 @@ class App extends Component {
     let selected = null;
     let data = null;
     if (this.state.selected !== null) {
-      let row = this.state.rows[this.state.selected];
+      let { category, index } = this.state.selected;
+      let row = this.state.rows[category][index];
 
       selected = (
         <TodoForm
@@ -226,16 +220,16 @@ class App extends Component {
 
 const viewModes = { 'kanban': 0, 'normal': 1 }
 let SCREEN;
+
 // this should be moved to sequelize code
-getCategories(todos) {
-  let cols = {};
+function getCategories (todos, categories) {
+  let cols = categories.reduce((prev, current) => {
+    prev[current] = [];
+    return prev;
+  }, {});
+
   todos.forEach((todo) => {
-    if (cols[todo.category]) {
-      cols[todo.category].push(todo.title);
-    } else {
-     cols[todo.category] = [];
-     cols[todo.category].push(todo.title);
-    }
+    cols[todo.category].push(todo);
   });
   return cols;
 }
@@ -259,7 +253,8 @@ export default function runGui(program) {
 
   Project.findOne({where: { name: projectName}}).then((p) => {
     p.getTodos().then((todos) => {
-       const app = render(<App project={p} rows={getCategories(todos)} />, screen);
+       let rows = getCategories(todos, p.categories.split(','));
+       const app = render(<App project={p} rows={rows} />, screen);
 
       screen.key(['escape'], function(ch, key) {
         app.setState({selected: null, showMenu: false, showNewForm: false});
@@ -306,4 +301,4 @@ export default function runGui(program) {
       });
     });
   });
-
+}
