@@ -49,6 +49,6 @@ var syncDb = exports.syncDb = function syncDb(cb) {
     Project.create({
       name: 'default',
       categories: 'todo,done'
-    }).then(cb);
+    }).then(cb).catch(cb);
   });
 };

@@ -14,6 +14,7 @@ class App extends Component {
     this.state = {
       rows: this.props.rows,
       project: this.props.project,
+      singleColSelectedCat: this.props.project.categories.split(',')[0]
       selected: null,
       showMenu: false,
       showNewForm: false,
@@ -23,7 +24,9 @@ class App extends Component {
   }
 
   formatedRows() {
-    let rows = this.state.rows.map((row, index, list) => {
+    const category = this.state.singleColSelectedCat;
+    let rows = this.state.rows[category].map((row, index, list) => {
+      // this should be in a model
       var date = new sugar.Date(row.createdAt).format('%Y-%m-%d').raw
       let due = '';
       if (row.due) {
@@ -143,8 +146,9 @@ class App extends Component {
   }
 
   getView() {
-    if (this.state.viewMode === viewModes.kanban) {
-      return this.render3Column(this.makeKanbanColumns(this.state.rows));
+    const { viewMode, rows } = this.state;
+    if (viewMode === viewModes.kanban) {
+      return this.render3Column(rows);
     } else {
       return this.renderNormalMode(this.formatedRows());
     }
@@ -222,8 +226,18 @@ class App extends Component {
 
 const viewModes = { 'kanban': 0, 'normal': 1 }
 let SCREEN;
-let initialState = {
-// initial state goes here.
+// this should be moved to sequelize code
+getCategories(todos) {
+  let cols = {};
+  todos.forEach((todo) => {
+    if (cols[todo.category]) {
+      cols[todo.category].push(todo.title);
+    } else {
+     cols[todo.category] = [];
+     cols[todo.category].push(todo.title);
+    }
+  });
+  return cols;
 }
 
 export default function runGui(program) {
@@ -235,9 +249,8 @@ export default function runGui(program) {
     debug: true,
   });
 
+  // TODO make the default project stuff configurable. maybe..
   const projectName = program.project ? program.project : 'default';
-  const app = new EventEmitter2();
-  app.state = Object.assign(initialState, {project: projectName});
   SCREEN = screen;
 
   screen.key(['q', 'C-c'], function(ch, key) {
@@ -246,7 +259,7 @@ export default function runGui(program) {
 
   Project.findOne({where: { name: projectName}}).then((p) => {
     p.getTodos().then((todos) => {
-       const app = render(<App project={p} rows={todos} />, screen);
+       const app = render(<App project={p} rows={getCategories(todos)} />, screen);
 
       screen.key(['escape'], function(ch, key) {
         app.setState({selected: null, showMenu: false, showNewForm: false});
@@ -294,4 +307,3 @@ export default function runGui(program) {
     });
   });
 
-}

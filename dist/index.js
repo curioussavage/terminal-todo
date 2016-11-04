@@ -39,11 +39,12 @@ function main() {
   _commander2.default.parse(process.argv);
 }
 
-_fs2.default.access('./todos.sqlite3', function (err) {
-  console.log('found file');
-  if (err) {
-    (0, _db.syncDb)(main);
-  } else {
-    main();
-  }
-});
+main();
+
+/*fs.access('./todos.sqlite3', function(err) {*/
+//if (err) {
+//syncDb(main);
+//} else {
+//main();
+//}
+/*});*/

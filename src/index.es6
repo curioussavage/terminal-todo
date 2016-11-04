@@ -49,10 +49,9 @@ function main() {
 main();
 
 /*fs.access('./todos.sqlite3', function(err) {*/
-  //console.log('found file')
   //if (err) {
     //syncDb(main);
   //} else {
     //main();
   //}
-/*}*/);
+/*});*/
