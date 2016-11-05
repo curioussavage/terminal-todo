@@ -273,6 +273,7 @@ export default function runGui(program) {
 
       screen.key('v', function(ch, key) {
         let newState = null;
+        if (app.state.selected) { return; }
         if (app.state.viewMode === viewModes.kanban) {
           newState = viewModes.normal;
         } else {

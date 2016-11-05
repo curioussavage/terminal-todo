@@ -48,7 +48,7 @@ export default class ModalForm extends Component {
   }
 
   render() {
-    const { due, title, description, done } = this.props.todo;
+    const { due, title, description } = this.props.todo;
     const { isNew, close } = this.props;
 
     return (
@@ -83,23 +83,12 @@ export default class ModalForm extends Component {
             value={ description }
           />
 
-          { isNew ? null : (
-          <checkbox
-            name="done"
-            style={{ focus: { bg: '#ff0000' } }}
-            position={{ top: 13, height: 2 }}
-            keys={true}
-            vi={true}
-            checked={ done }
-            text='done'
-          />)}
-
           <text
-            position={{ top: 15, width: '20%'  }}
+            position={{ top: 13, width: '20%'  }}
             content={'due' }
           />
           <textbox
-            position={{ top: 15, width: '80%', height: 2, left: '20%' }}
+            position={{ top: 13, width: '80%', height: 2, left: '20%' }}
             style={{ bg: 'gray', focus: { bg: '#ff0000' } }}
             keys={ true }
             vi={ true }
@@ -107,7 +96,7 @@ export default class ModalForm extends Component {
           />
 
           <button
-            position={ { top: 20, left: '10', width: '50%', height: 3 } }
+            position={ { bottom: 0, left: '10', width: '50%', height: 3 } }
             style={{ focus: { bg: '#ff0000' } }}
             border={{type: 'line'}}
             keys={true}

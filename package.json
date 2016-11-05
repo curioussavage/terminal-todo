@@ -7,7 +7,7 @@
     "build": "src/*.js"
   },
   "scripts": {
-    "postinstall": "script goes here",
+    "postinstall": "node ./dist/postInstall.js",
     "build": "babel src --out-dir dist",
     "watch": "babel src --watch --out-dir dist"
   },

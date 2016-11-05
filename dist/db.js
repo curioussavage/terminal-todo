@@ -37,7 +37,6 @@ var Todo = exports.Todo = db.define('Todo', {
   title: _sequelize2.default.STRING,
   description: { type: _sequelize2.default.TEXT, defaultValue: '' },
   category: { type: _sequelize2.default.STRING, defaultValue: '' },
-  done: { type: _sequelize2.default.BOOLEAN, defaultValue: false },
   due: { type: _sequelize2.default.STRING, defaultValue: '' }
 });
 

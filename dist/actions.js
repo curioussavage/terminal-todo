@@ -127,11 +127,11 @@ function addTodo(title, p) {
     title: title.join(' '),
     category: category,
     created: new Date().toUTCString(),
+    // the default project should be configurable
     ProjectId: p.project || 1
   };
 
   var newTodo = _db.Todo.create(params).then(function (todo) {
-
     console.log('created');
   });
 }

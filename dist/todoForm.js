@@ -88,8 +88,7 @@ var ModalForm = function (_Component) {
       var _props$todo = this.props.todo,
           due = _props$todo.due,
           title = _props$todo.title,
-          description = _props$todo.description,
-          done = _props$todo.done;
+          description = _props$todo.description;
       var _props = this.props,
           isNew = _props.isNew,
           close = _props.close;
@@ -133,28 +132,19 @@ var ModalForm = function (_Component) {
             keys: true,
             value: description
           }),
-          isNew ? null : _react2.default.createElement('checkbox', {
-            name: 'done',
-            style: { focus: { bg: '#ff0000' } },
-            position: { top: 13, height: 2 },
-            keys: true,
-            vi: true,
-            checked: done,
-            text: 'done'
-          }),
           _react2.default.createElement('text', {
-            position: { top: 15, width: '20%' },
+            position: { top: 13, width: '20%' },
             content: 'due'
           }),
           _react2.default.createElement('textbox', {
-            position: { top: 15, width: '80%', height: 2, left: '20%' },
+            position: { top: 13, width: '80%', height: 2, left: '20%' },
             style: { bg: 'gray', focus: { bg: '#ff0000' } },
             keys: true,
             vi: true,
             value: due ? new _sugar2.default.Date(due).format('%Y-%m-%d').raw : due
           }),
           _react2.default.createElement('button', {
-            position: { top: 20, left: '10', width: '50%', height: 3 },
+            position: { bottom: 0, left: '10', width: '50%', height: 3 },
             style: { focus: { bg: '#ff0000' } },
             border: { type: 'line' },
             keys: true,

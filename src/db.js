@@ -24,7 +24,6 @@ export const Todo = db.define('Todo', {
   title: Sequelize.STRING,
   description: { type: Sequelize.TEXT, defaultValue: '' },
   category: { type: Sequelize.STRING, defaultValue: '' },
-  done: { type: Sequelize.BOOLEAN, defaultValue: false },
   due: { type: Sequelize.STRING, defaultValue: ''},
 });
 
