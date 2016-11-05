@@ -32,6 +32,8 @@ function main() {
 
   _commander2.default.command('list').description('list todos').option('-c --category <category>', 'filter by category', '').option('-p --project <project>', 'filter by project', '').action(_actions.listTodos);
 
+  _commander2.default.command('info <index>').description('git todo details').action(_actions.todoInfo);
+
   // maybe a reason to find an alternative, subcommands aren't well documented
   // many issues on github about them
   _commander2.default.command('project <subcommand> [args...]', 'manage projects');

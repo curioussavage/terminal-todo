@@ -14,6 +14,7 @@ exports.archiveProject = archiveProject;
 exports.markDone = markDone;
 exports.listTodos = listTodos;
 exports.editTodo = editTodo;
+exports.todoInfo = todoInfo;
 exports.addTodo = addTodo;
 
 var _db = require('./db.js');
@@ -118,6 +119,18 @@ function editTodo(index, field, val) {
 
     todo[field] = val;
     todo.save();
+  });
+}
+
+function todoInfo(index) {
+  _db.Todo.findOne({ where: { id: index } }).then(function (todo) {
+    console.log(todo.title, '\n');
+
+    console.log('description');
+    console.log(todo.description);
+
+    console.log('due');
+    console.log(todo.due);
   });
 }
 

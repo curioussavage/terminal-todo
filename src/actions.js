@@ -85,6 +85,19 @@ export function editTodo(index, field, val) {
 
 }
 
+export function todoInfo(index) {
+  Todo.findOne({ where: { id: index}}).then((todo) => {
+    console.log(todo.title, '\n')
+
+
+    console.log('description')
+    console.log(todo.description)
+
+    console.log('due')
+    console.log(todo.due) 
+  });
+}
+
 export function addTodo(title, p) {
   let category = !p.project && !p.category ? 'todo' : p.category || '';
   let params = {

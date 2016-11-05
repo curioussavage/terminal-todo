@@ -47,17 +47,9 @@ var ModalForm = function (_Component) {
 
       this.refs.titleField.focus();
 
-      this.refs.modal.key(['escape'], function (ch, key) {
-        _this2.props.close();
-      });
-
       this.refs.form.on('submit', function (data) {
         _this2.save(data);
       });
-
-      this.refs.form.on('keypress', function (el, key) {
-        this.refs.form.debug('foo');
-      }.bind(this));
     }
   }, {
     key: 'submit',
@@ -72,6 +64,15 @@ var ModalForm = function (_Component) {
       // add code to convert the time and to show error if it is invalid
       // maybe some validation for other fields
       this.props.todo.title = data.title;
+      this.props.todo.description = data.description;
+
+      if (data.due !== '') {
+        var date = new _sugar2.default.Date(data.due).raw.toString();
+        this.props.todo.due = date;
+        // need to handle possible errors here
+        // probably alert the user
+      }
+
       this.props.todo.save().then(function (todo) {
         this.props.reload();
         this.props.close();
@@ -102,7 +103,7 @@ var ModalForm = function (_Component) {
           top: 'center',
           left: 'center',
           width: '70%',
-          height: '70%',
+          height: '600',
           padding: 1,
           border: { type: 'line' },
           onKeyPress: function onKeyPress(ch, key) {
@@ -123,9 +124,13 @@ var ModalForm = function (_Component) {
             style: { bg: 'gray', focus: { bg: '#ff0000' } },
             value: title
           }),
+          _react2.default.createElement('text', {
+            position: { top: 2 },
+            content: 'description'
+          }),
           _react2.default.createElement('textarea', {
             name: 'description',
-            position: { top: 2, width: '100%', height: 10 },
+            position: { top: 4, width: '100%', height: 10 },
             style: { bg: 'gray', focus: { bg: '#ff0000' } },
             inputOnFocus: true,
             vi: true,
@@ -133,11 +138,12 @@ var ModalForm = function (_Component) {
             value: description
           }),
           _react2.default.createElement('text', {
-            position: { top: 13, width: '20%' },
+            position: { top: 15, width: '20%' },
             content: 'due'
           }),
           _react2.default.createElement('textbox', {
-            position: { top: 13, width: '80%', height: 2, left: '20%' },
+            name: 'due',
+            position: { top: 15, width: '80%', height: 2, left: '20%' },
             style: { bg: 'gray', focus: { bg: '#ff0000' } },
             keys: true,
             vi: true,
@@ -153,7 +159,7 @@ var ModalForm = function (_Component) {
             onPress: this.close.bind(this)
           }),
           _react2.default.createElement('button', {
-            position: { top: 20, width: '50%', left: '50%', height: 3 },
+            position: { bottom: 0, width: '50%', left: '50%', height: 3 },
             style: { focus: { bg: '#ff0000' } },
             border: { type: 'line' },
             keys: true,

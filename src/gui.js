@@ -159,6 +159,7 @@ class App extends Component {
 
       selected = (
         <TodoForm
+          ref='modalForm'
           close={this.close.bind(this)}
           todo={ row }
           reload={ this.reload.bind(this) }
@@ -268,7 +269,8 @@ export default function runGui(program) {
       });
 
       screen.key('s', function(ch, key) {
-        screen.debug(app.refs)
+        //screen.debug(app.refs)
+        app.refs.modalForm.submit()
       }.bind(this));
 
       screen.key('v', function(ch, key) {

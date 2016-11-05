@@ -13,17 +13,9 @@ export default class ModalForm extends Component {
   componentDidMount() {
     this.refs.titleField.focus()
 
-    this.refs.modal.key(['escape'], (ch, key) => {
-      this.props.close();
-    });
-
     this.refs.form.on('submit', (data) => {
       this.save(data);
     });
-
-    this.refs.form.on('keypress', function(el, key) {
-      this.refs.form.debug('foo')
-    }.bind(this))
 
   }
 
@@ -36,7 +28,16 @@ export default class ModalForm extends Component {
     // better yet define validators on the sequelize model
     // add code to convert the time and to show error if it is invalid
     // maybe some validation for other fields
-    this.props.todo.title = data.title
+    this.props.todo.title = data.title;
+    this.props.todo.description = data.description;
+
+    if (data.due !== '') {
+      let date = new sugar.Date(data.due).raw.toString();
+      this.props.todo.due = date;
+      // need to handle possible errors here
+      // probably alert the user
+    }
+
     this.props.todo.save().then(function(todo) {
       this.props.reload();
       this.props.close();
@@ -58,7 +59,7 @@ export default class ModalForm extends Component {
           top="center"
           left="center"
           width="70%"
-          height="70%"
+          height="600"
           padding={1}
           border={{type: 'line'}}
           onKeyPress={(ch, key) => { if (key.full === 'c') { close() } }}
@@ -73,9 +74,13 @@ export default class ModalForm extends Component {
             style={{ bg: 'gray' , focus: { bg: '#ff0000' } }}
             value={ title }
           />
+          <text
+            position={{top: 2}}
+            content='description'
+          />
           <textarea
             name="description"
-            position={{ top: 2, width: '100%', height: 10 }}
+            position={{ top: 4, width: '100%', height: 10 }}
             style={{ bg: 'gray', focus: { bg: '#ff0000' } }}
             inputOnFocus={ true }
             vi={ true }
@@ -84,11 +89,12 @@ export default class ModalForm extends Component {
           />
 
           <text
-            position={{ top: 13, width: '20%'  }}
+            position={{ top: 15, width: '20%'  }}
             content={'due' }
           />
           <textbox
-            position={{ top: 13, width: '80%', height: 2, left: '20%' }}
+            name="due"
+            position={{ top: 15, width: '80%', height: 2, left: '20%' }}
             style={{ bg: 'gray', focus: { bg: '#ff0000' } }}
             keys={ true }
             vi={ true }
@@ -106,7 +112,7 @@ export default class ModalForm extends Component {
           />
 
           <button
-            position={ { top: 20, width: '50%', left: '50%', height: 3 } }
+            position={ { bottom: 0, width: '50%', left: '50%', height: 3 } }
             style={{ focus: { bg: '#ff0000' } }}
             border={{type: 'line'}}
             keys={true}

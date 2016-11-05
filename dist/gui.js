@@ -220,6 +220,7 @@ var App = function (_Component) {
         var row = this.state.rows[category][index];
 
         selected = _react2.default.createElement(_todoForm2.default, {
+          ref: 'modalForm',
           close: this.close.bind(this),
           todo: row,
           reload: this.reload.bind(this)
@@ -333,7 +334,8 @@ function runGui(program) {
       });
 
       screen.key('s', function (ch, key) {
-        screen.debug(app.refs);
+        //screen.debug(app.refs)
+        app.refs.modalForm.submit();
       }.bind(_this3));
 
       screen.key('v', function (ch, key) {

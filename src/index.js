@@ -5,6 +5,7 @@ import {
   listTodos,
   addTodo,
   editTodo,
+  todoInfo,
 } from './actions.js';
 import { syncDb } from './db.js';
 
@@ -38,6 +39,10 @@ function main() {
     .option('-c --category <category>', 'filter by category', '')
     .option('-p --project <project>', 'filter by project', '')
     .action(listTodos);
+
+  program.command('info <index>')
+    .description('git todo details')
+    .action(todoInfo)
 
   // maybe a reason to find an alternative, subcommands aren't well documented
   // many issues on github about them
