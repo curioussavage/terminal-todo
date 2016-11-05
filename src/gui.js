@@ -115,21 +115,20 @@ class App extends Component {
 
   renderNormalMode(rows) {
     return (
-      <listtable
-           ref="table"
-           height="95%"
-           width="100%"
-           border={{type: 'line'}}
-           clickable={true}
-           keyable={true}
-           keys={true}
-           vi={true}
-           rows={ rows }
-           selectedBg='blue'
-           style={{ header: {fg: 'blue'}}}
-           onSelect={ this.singleModeSelect.bind(this) }
-      >
-      </listtable>
+        <listtable
+             ref="table"
+             height="95%"
+             width="100%"
+             border={{type: 'line'}}
+             clickable={true}
+             keyable={true}
+             keys={true}
+             vi={true}
+             rows={ rows }
+             selectedBg='blue'
+             style={{ header: {fg: 'blue'}}}
+             onSelect={ this.singleModeSelect.bind(this) }
+        />
     );
   }
 
@@ -177,7 +176,7 @@ class App extends Component {
           height="60%"
           border={{ type: 'line' }}
         >
-
+        :w
         </box>
       )
     }

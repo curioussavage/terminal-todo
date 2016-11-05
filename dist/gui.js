@@ -228,13 +228,17 @@ var App = function (_Component) {
 
       var menu = null;
       if (this.state.showMenu) {
-        menu = _react2.default.createElement('box', {
-          top: '20%',
-          left: '20%',
-          width: '60%',
-          height: '60%',
-          border: { type: 'line' }
-        });
+        menu = _react2.default.createElement(
+          'box',
+          {
+            top: '20%',
+            left: '20%',
+            width: '60%',
+            height: '60%',
+            border: { type: 'line' }
+          },
+          ':w'
+        );
       }
 
       var newForm = null;

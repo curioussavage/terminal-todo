@@ -4,12 +4,12 @@
   "description": "another terminal todo list",
   "main": "index.js",
   "watch": {
-    "build": "src/*"
+    "build": "src/*.js"
   },
   "scripts": {
     "postinstall": "script goes here",
     "build": "babel src --out-dir dist",
-    "watch": "npm-watch"
+    "watch": "babel src --watch --out-dir dist"
   },
   "author": "curioussavage",
   "license": "ISC",
