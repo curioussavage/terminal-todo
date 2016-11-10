@@ -3,15 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; //import Todo from './model.js';
-
-
 exports.addProject = addProject;
 exports.listProjects = listProjects;
 exports.editProject = editProject;
 exports.archiveProject = archiveProject;
-exports.markDone = markDone;
 exports.listTodos = listTodos;
 exports.editTodo = editTodo;
 exports.todoInfo = todoInfo;
@@ -33,6 +28,7 @@ var _chalk2 = _interopRequireDefault(_chalk);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//import Todo from './model.js';
 function addProject(name, program) {
   _db.Project.create({
     name: name,
@@ -64,15 +60,10 @@ function archiveProject(name) {
   });
 }
 
-function markDone(id) {
-  _db.Todo.findOne({ id: id }).then(function (doc) {
-    doc.done = true;
-    doc.save();
-  });
-}
-
 function listTodos(program) {
-  _db.Todo.findAll({ where: { done: false } }).then(function (docs) {
+  // need to make some logic to search based on projects not in the final state
+  // based on the categories list
+  _db.Todo.findAll({}).then(function (docs) {
     var columns = (0, _columnify2.default)(docs, {
       columns: ['id', 'title', 'createdAt', 'due'],
       minWidth: 12,
@@ -111,7 +102,6 @@ function editTodo(index, field, val) {
 
     if (field === 'created' || field === 'due') {
       val = new _sugar2.default.Date(val).raw.toString();
-      console.log(typeof val === 'undefined' ? 'undefined' : _typeof(val));
       if (field === 'created') {
         field = 'createdAt';
       }

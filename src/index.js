@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import runGui from './gui';
 import {
-  markDone,
   listTodos,
   addTodo,
   editTodo,
@@ -26,11 +25,7 @@ function main() {
     .option('-p --project <project>', 'the project this task belongs to', '')
     .action(addTodo)
 
-  program.command('done <index>')
-    .description('mark a todo as done')
-    .action(markDone)
-
-  program.command('edit <index> <field> <value>')
+    program.command('edit <index> <field> <value>')
     .description('edit a todo field value')
     .action(editTodo)
 

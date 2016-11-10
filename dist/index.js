@@ -26,8 +26,6 @@ function main() {
 
   _commander2.default.command('add <title...>').description('add a todo').option('-c --category <category>', 'the assigned category', '').option('-p --project <project>', 'the project this task belongs to', '').action(_actions.addTodo);
 
-  _commander2.default.command('done <index>').description('mark a todo as done').action(_actions.markDone);
-
   _commander2.default.command('edit <index> <field> <value>').description('edit a todo field value').action(_actions.editTodo);
 
   _commander2.default.command('list').description('list todos').option('-c --category <category>', 'filter by category', '').option('-p --project <project>', 'filter by project', '').action(_actions.listTodos);

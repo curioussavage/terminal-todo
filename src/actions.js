@@ -33,15 +33,10 @@ export function archiveProject(name) {
   });
 }
 
-export function markDone(id) {
-  Todo.findOne({id: id}).then((doc) => {
-    doc.done = true;
-    doc.save()
-  })
-}
-
 export function listTodos(program) {
- Todo.findAll({where: {done: false}}).then((docs) => {
+  // need to make some logic to search based on projects not in the final state
+  // based on the categories list
+ Todo.findAll({}).then((docs) => {
    let columns = columnify(docs, {
      columns: ['id', 'title','createdAt', 'due'],
      minWidth: 12,
@@ -74,7 +69,6 @@ export function editTodo(index, field, val) {
 
     if ( field === 'created' || field === 'due') {
       val = new sugar.Date(val).raw.toString();
-      console.log(typeof val)
       if (field === 'created') { field = 'createdAt'}
     }
 
