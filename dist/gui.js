@@ -272,7 +272,7 @@ var App = function (_Component) {
             height: '10%',
             border: { type: 'line' }
           },
-          'q:quit enter:select m:menu n:new  v:toggle view'
+          'q:quit enter:select s:settings n:new  v:toggle view m: move todo'
         )
       );
     }
@@ -325,7 +325,7 @@ function runGui(program) {
         app.setState({ selected: null, showMenu: false, showNewForm: false });
       });
 
-      screen.key(['m'], function (ch, key) {
+      screen.key(['s'], function (ch, key) {
         app.setState({ showMenu: !app.state.showMenu });
       });
 
