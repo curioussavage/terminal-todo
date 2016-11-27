@@ -55,7 +55,10 @@ var App = function (_Component) {
       showMenu: false,
       showNewForm: false,
       viewMode: viewModes.normal,
-      kanbanFocused: 0
+      kanbanFocused: 0,
+      changingCategory: false,
+      kanbanOffset: 0,
+      kanbanMaxCols: 2
     };
     return _this;
   }
@@ -113,12 +116,14 @@ var App = function (_Component) {
       // TODO make the model transform this to array automagically
       var _state2 = this.state,
           project = _state2.project,
-          kanbanFocused = _state2.kanbanFocused;
+          kanbanFocused = _state2.kanbanFocused,
+          kanbanOffset = _state2.kanbanOffset,
+          kanbanMaxCols = _state2.kanbanMaxCols;
 
       var colNames = project.categories.split(",");
-      // pick how to do the slice
       var left = 0;
-      return colNames.slice(0, 2).map(function (colName, index) {
+
+      return colNames.slice(kanbanOffset, kanbanMaxCols).map(function (colName, index) {
         if (index > 0) {
           left += 33;
         }
@@ -168,20 +173,34 @@ var App = function (_Component) {
   }, {
     key: 'renderNormalMode',
     value: function renderNormalMode(rows) {
-      return _react2.default.createElement('listtable', {
-        ref: 'table',
-        height: '95%',
-        width: '100%',
-        border: { type: 'line' },
-        clickable: true,
-        keyable: true,
-        keys: true,
-        vi: true,
-        rows: rows,
-        selectedBg: 'blue',
-        style: { header: { fg: 'blue' } },
-        onSelect: this.singleModeSelect.bind(this)
-      });
+      return _react2.default.createElement(
+        'box',
+        {
+          height: '80%',
+          width: '100%'
+        },
+        _react2.default.createElement('box', {
+          top: '0',
+          height: '50',
+          width: '100%',
+          content: this.state.project.name
+        }),
+        _react2.default.createElement('listtable', {
+          ref: 'table',
+          height: '100%',
+          width: '100%',
+          top: '60',
+          border: { type: 'line' },
+          clickable: true,
+          keyable: true,
+          keys: true,
+          vi: true,
+          rows: rows,
+          selectedBg: 'blue',
+          style: { header: { fg: 'blue' } },
+          onSelect: this.singleModeSelect.bind(this)
+        })
+      );
     }
   }, {
     key: 'singleModeSelect',
@@ -325,7 +344,20 @@ function runGui(program) {
         app.setState({ selected: null, showMenu: false, showNewForm: false });
       });
 
-      screen.key(['s'], function (ch, key) {
+      screen.key(['e'], function (ch, key) {
+        app.refs.k0.select(1);
+      });
+
+      screen.key(['c'], function (ch, key) {
+        var mode = app.state.viewMode;
+        if (mode === vewModes.kanban) {
+          var id = app.state;
+        } else {}
+
+        app.setState({ changingCategory: id });
+      });
+
+      screen.key(['m'], function (ch, key) {
         app.setState({ showMenu: !app.state.showMenu });
       });
 
@@ -333,7 +365,7 @@ function runGui(program) {
         app.setState({ showNewForm: true });
       });
 
-      screen.key('s', function (ch, key) {
+      screen.key('u', function (ch, key) {
         //screen.debug(app.refs)
         app.refs.modalForm.submit();
       }.bind(_this3));

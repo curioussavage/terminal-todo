@@ -21,6 +21,9 @@ class App extends Component {
       showNewForm: false,
       viewMode: viewModes.normal,
       kanbanFocused: 0,
+      changingCategory: false,
+      kanbanOffset: 0,
+      kanbanMaxCols: 2,
     };
   }
 
@@ -66,11 +69,11 @@ class App extends Component {
 
   render3Column(cols) {
     // TODO make the model transform this to array automagically
-    const { project, kanbanFocused } = this.state;
+    const { project, kanbanFocused, kanbanOffset, kanbanMaxCols } = this.state;
     let colNames = project.categories.split(",");
-    // pick how to do the slice
     let left = 0;
-    return colNames.slice(0, 2).map((colName, index) => {
+
+    return colNames.slice(kanbanOffset, kanbanMaxCols).map((colName, index) => {
       if (index > 0) { left += 33 }
       const isFocused = index === kanbanFocused;
       return (
@@ -115,10 +118,21 @@ class App extends Component {
 
   renderNormalMode(rows) {
     return (
+      <box 
+        height="80%"
+        width="100%"
+      >
+        <box 
+          top="0"
+          height="50"
+          width="100%"
+          content={ this.state.project.name }
+        />
         <listtable
              ref="table"
-             height="95%"
+             height="100%"
              width="100%"
+             top="60"
              border={{type: 'line'}}
              clickable={true}
              keyable={true}
@@ -129,6 +143,7 @@ class App extends Component {
              style={{ header: {fg: 'blue'}}}
              onSelect={ this.singleModeSelect.bind(this) }
         />
+      </box>
     );
   }
 
@@ -260,7 +275,22 @@ export default function runGui(program) {
         app.setState({selected: null, showMenu: false, showNewForm: false});
        });
 
-      screen.key(['s'], function(ch, key){
+       screen.key(['e'], function(ch, key) {
+         app.refs.k0.select(1) 
+       });
+
+      screen.key(['c'], function(ch, key) {
+        var mode = app.state.viewMode;
+        if (mode === vewModes.kanban) {
+          var id = app.state;
+        } else {
+        
+        }
+
+        app.setState({changingCategory: id});
+      });
+
+      screen.key(['m'], function(ch, key){
         app.setState({showMenu: !app.state.showMenu});
       });
 
@@ -268,7 +298,7 @@ export default function runGui(program) {
        app.setState({ showNewForm: true })
       });
 
-      screen.key('s', function(ch, key) {
+      screen.key('u', function(ch, key) {
         //screen.debug(app.refs)
         app.refs.modalForm.submit()
       }.bind(this));
