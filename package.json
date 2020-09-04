@@ -22,7 +22,7 @@
     "parsetime": "^0.2.9",
     "react": "0.14.0",
     "react-blessed": "^0.1.7",
-    "sequelize": "^3.24.3",
+    "sequelize": "^6.3.5",
     "sqlite-orm": "^0.2.4",
     "sqlite3": "^3.1.6",
     "streamsql": "^0.8.5",
